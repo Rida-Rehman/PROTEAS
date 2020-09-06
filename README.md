@@ -3,7 +3,7 @@ PROTein Expression AnalysiS
 
 Protein microarray expression analysis
 
-The analysis was performed on raw data collected after microarray image analysis. The raw intensity values for each receptor/protein was recorded automatedly via recording software or manually using ImageJ software. 
+The analysis was performed on raw data collected after microarray image analysis. The raw intensity values for each receptor/protein was recorded automatedly via image recorder software or manually using ImageJ software. 
 
 # DEPENDENCIES
 PROTEAS repository is dependant on following libraries
