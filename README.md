@@ -3,7 +3,7 @@ PROTein Expression AnalysiS
 
 Protein microarray expression analysis
 
-PROTEAS repository is dependant on following
+PROTEAS repository is dependant on following libraries
 
 1. Limma
 2. DevTools
