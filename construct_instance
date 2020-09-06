@@ -1,0 +1,13 @@
+#### raw data should contain protein expression levels obtained after image analysis ####
+#### columns corresponds to sample and row corresponds to individual protein ####
+
+TVS<-read.columns(file = 'rawdata.txt') 
+
+SHAM<-data.frame(TVS[2:7])
+TBI_low<-data.frame(TVS[8:13])
+TBI_high<-data.frame(TVS[14:20])
+TBI_24h<-data.frame(TVS[21:26])
+TBI_3D<-data.frame(TVS[27:32])
+TBI_7d<-data.frame(TVS[33:38])
+
+total<-data.frame(SHAM,TBI_low,TBI_high,TBI_24h,TBI_3D,TBI_7d)
