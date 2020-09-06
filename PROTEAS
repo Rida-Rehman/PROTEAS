@@ -1,0 +1,153 @@
+#### time course venn diagram ####
+
+conmat11<-makeContrasts("tbi_high - sham","tbi_24 - tbi_high","tbi_3d - tbi_24","tbi_7d - tbi_3d", levels = dm)
+ft11<-contrasts.fit(ft, conmat11)
+ft11<-eBayes(ft11)
+summary(decideTests(ft11))
+topTable(ft11, adjust.method = "fdr", genelist = TVS$Name, sort.by = 'none'  )
+A11<-topTable(ft11, adjust.method = "fdr", genelist = TVS$Name, sort.by = 'none', number = 78  )
+selected11<-(A11$adj.P.Val<0.05)
+z11<-data.frame(v11,w11,u11,xx11,y11)
+test11<-data.frame(TVS$Name,selected11,z11)
+esetSel11 <- test11[selected11,]
+my_palette11 <- colorRampPalette(c("blue2","blue1","white","red1","red2"))
+heatmap.2(as.matrix(esetSel11[,3:33]), density.info = "histogram", trace = "none", scale = c("row"), col = my_palette11, margins =c(5,5), labRow = esetSel11$TVS.Name, key = TRUE, hclustfun = function(x) hclust(x, method="ward.D2"), distfun   = function(x) as.dist(1-cor(t(x))), keysize=0.5, key.par = list(cex=0.5), lhei=c(2,5), lwid=c(2,5), cexRow = 0.55,cexCol = 0.7)
+timecourse<-data.frame(decideTests(ft11))
+vennDiagram(timecourse,circle.col=c("red", "blue", "green3"))
+
+####  venn diagramm - result summary ####
+
+tta<-data.frame(ttb[,1:39])
+mergetotal2<-rbind(sham1,tbil,tbih,tbi24,tbi3d,tbi7d)
+mergetotal2$treatment<-factor(mergetotal2$treatment, levels = c("sham","tbi_low","tbi_high","tbi_24","tbi_3d", "tbi_7d"))
+dm2<-model.matrix(~0+mergetotal2$treatment)
+colnames(dm2)<-c("sham","tbi_low","tbi_high","tbi_24","tbi_3d", "tbi_7d")
+fta<-lmFit(tta,dm2)
+conmata<-makeContrasts("tbi_high - sham", "tbi_3d - tbi_high","tbi_3d - tbi_7d", levels = dm2)
+fta<-contrasts.fit(ft, conmata)
+fta<-eBayes(fta)
+rslts<-summary(decideTests(fta[,-1]))
+vennDiagram(rslts, include = c("up","down"))
+
+
+#### comparison between tbi_high vs sham ####
+
+
+conmat1<-makeContrasts("tbi_high - sham", levels = dm)
+ft1<-contrasts.fit(ft, conmat1)
+ft1<-eBayes(ft1)
+topTable(ft1, adjust.method = "fdr", genelist = TVS$Name)
+A1<-topTable(ft1, adjust.method = "fdr", genelist = TVS$Name, number = 78, sort.by = "none" )
+x1<-data.frame(total.norm[,1:7])
+y1<-data.frame(total.norm[,14:20])
+z1<-data.frame(y1,x1)
+selected1<-(A1$adj.P.Val <0.05)
+test1<-data.frame(TVS$Name,selected1,z1)
+esetSel1 <- test1[selected1,]
+my_palette1 <- colorRampPalette(c("green2","green3","green4","black","red4","red3","red2"))
+heatmap(as.matrix(esetSel1[,3:15]),col=my_palette1, scale = "row", distfun   = function(x) as.dist(1-cor(t(x))), 
+        hclustfun = function(x) hclust(x, method="ave"), labRow = esetSel1$TVS.Name)
+heatmap.2(as.matrix(esetSel1[,3:15]), density.info = "none", trace = "none", scale = c("row"), col = my_palette1, margins =c(5,5), labRow = esetSel1$TVS.Name, key = TRUE, hclustfun = function(x) hclust(x, method="ave"), distfun   = function(x) as.dist(1-cor(t(x))), keysize=0.5, key.par = list(cex=0.5), lhei=c(2,5), lwid=c(2,5), cexRow = 0.75,cexCol = 0.7)
+write.table(A1, file = "shamvstbihigh.txt")
+write.table(selected1, file = "shamvstbihigh_selected.txt")
+
+#### comparison between tbi_low vs sham ####
+
+conmat2<-makeContrasts("tbi_low - sham", levels = dm)
+ft2<-contrasts.fit(ft, conmat2)
+ft2<-eBayes(ft2)
+topTable(ft2, adjust.method = "fdr", genelist = TVS$Name, number = 78, sort.by = "none" )
+A2<-topTable(ft2, adjust.method = "fdr", genelist = TVS$Name, number = 78 , sort.by = "none" )
+selected2<-(A2$adj.P.Val <0.05)
+x2<-data.frame(total.norm[,1:6])
+y2<-data.frame(total.norm[,7:12])
+z2<-data.frame(x2,y2)
+test2<-data.frame(TVS$Name,selected2,z2)
+esetSel2 <- test2[selected2,]
+my_palette2 <- colorRampPalette(c("green2","green3","green4","red4","red3","red2"))(n = 23)
+heatmap.2(as.matrix(esetSel2[,3:14]), density.info = "none", trace = "none", scale = c("row"), col = my_palette2, margins =c(5,5), labRow = esetSel2$TVS.Name, key = TRUE, hclustfun = function(x) hclust(x, method="ave"), distfun   = function(x) as.dist(1-cor(t(x))), keysize=0.5, key.par = list(cex=0.5), lhei=c(2,5), lwid=c(2,5), cexRow = 0.75,cexCol = 0.7)
+write.table(A2, file = "shamvstbilow.txt")
+write.table(selected2, file = "shamvstbilow_selected.txt")
+
+#### comparison between tbi_24h vs sham ####
+
+conmat3<-makeContrasts("tbi_24 - sham", levels = dm)
+ft3<-contrasts.fit(ft, conmat3)
+ft3<-eBayes(ft3)
+topTable(ft3, adjust.method = "fdr", genelist = TVS$Name, number = 78,sort.by = "none"  )
+A3<- topTable(ft3, adjust.method = "fdr", genelist = TVS$Name, number = 78,sort.by = "none"   )
+selected3<-(A3$adj.P.Val <0.05)
+x3<-data.frame(ttb[,1:6])
+y3<-data.frame(ttb[,21:26])
+z3<-data.frame(x3,y3)
+test3<-data.frame(TVS$Name,selected3,z3)
+esetSel3 <- test3[selected3,]
+my_palette3 <- colorRampPalette(c("green2","green3","green4","black","red4","red3","red2"))(n = 25)
+heatmap(as.matrix(esetSel3[,3:14]),col=my_palette1, scale = "row", distfun   = function(x) as.dist(1-cor(t(x))), 
+        hclustfun = function(x) hclust(x, method="ave"), labRow = esetSel3$TVS.Name)
+heatmap.2(as.matrix(esetSel3[,3:14]), density.info = "histogram", trace = "none", scale = c("row"), col = my_palette3, margins =c(5,5), labRow = esetSel3$TVS.Name, key = TRUE, hclustfun = function(x) hclust(x, method="ave"), distfun   = function(x) as.dist(1-cor(t(x))), keysize=0.5, key.par = list(cex=0.5), lhei=c(2,5), lwid=c(2,5), cexRow = 0.75,cexCol = 0.7)
+write.table(A3, file = "shamvs24htbi.txt")
+write.table(selected3, file = "shamvstbi24_selected.txt")
+
+#### comparison between tbi_3d vs sham ####
+
+conmat10<-makeContrasts("tbi_3d - sham", levels = dm)
+ft10<-contrasts.fit(ft, conmat10)
+ft10<-eBayes(ft10)
+topTable(ft10, adjust.method = "fdr", genelist = TVS$Name, number = 78,sort.by = "none"  )
+A10<- topTable(ft10, adjust.method = "fdr", genelist = TVS$Name, number = 78,sort.by = "none"   )
+selected10<-(A10$adj.P.Val <0.05)
+x10<-data.frame(ttb[,1:6])
+y10<-data.frame(ttb[,27:32])
+z10<-data.frame(x10,y10)
+test10<-data.frame(TVS$Name,selected10,z10)
+esetSel10 <- test10[selected10,]
+my_palette10 <- colorRampPalette(c("green2","green3","green4","black","red4","red3","red2"))(n = 25)
+heatmap(as.matrix(esetSel10[,3:14]),col=my_palette1, scale = "row", distfun   = function(x) as.dist(1-cor(t(x))), 
+        hclustfun = function(x) hclust(x, method="ave"), labRow = esetSel3$TVS.Name)
+heatmap.2(as.matrix(esetSel10[,3:14]), density.info = "histogram", trace = "none", scale = c("row"), col = my_palette1, margins =c(5,5), labRow = esetSel10$TVS.Name, key = TRUE, hclustfun = function(x) hclust(x, method="ave"), distfun   = function(x) as.dist(1-cor(t(x))), keysize=0.5, key.par = list(cex=0.5), lhei=c(2,5), lwid=c(2,5), cexRow = 0.75,cexCol = 0.7)
+write.table(A3, file = "shamvs3dtbi.txt")
+write.table(selected3, file = "shamvstbi24_selected.txt")
+
+#### comparison between tbi_7d vs sham ####
+
+conmat4<-makeContrasts("tbi_7d - sham", levels = dm)
+ft4<-contrasts.fit(ft, conmat4)
+ft4<-eBayes(ft4)
+topTable(ft4, adjust.method = "fdr", number = 78, sort.by = 'none')
+A4<-topTable(ft4, adjust.method = "fdr", number = 78, sort.by = 'none')
+selected4<-(A4$adj.P.Val <0.05)
+x4<-data.frame(ttb[,1:6])
+y4<-data.frame(ttb[,32:37])
+z4<-data.frame(x4,y4)
+test4<-data.frame(TVS$Name,selected4,z4)
+esetSel4 <- test4[selected4,]
+my_palette4 <- colorRampPalette(c("green2","green3","green4","black","red4","red3","red2"))(n = 21)
+heatmap(as.matrix(esetSel4[,3:14]),col=my_palette1, scale = "row", distfun   = function(x) as.dist(1-cor(t(x))), 
+        hclustfun = function(x) hclust(x, method="ave"), labRow = esetSel4$TVS.Name)
+heatmap.2(as.matrix(esetSel4[,3:14]), density.info = "histogram", trace = "none", scale = c("row"), col = my_palette11, margins =c(5,5), labRow = esetSel4$TVS.Name, key = TRUE, hclustfun = function(x) hclust(x, method="ave"), distfun   = function(x) as.dist(1-cor(t(x))), keysize=0.5, key.par = list(cex=0.5), lhei=c(2,5), lwid=c(2,5), cexRow = 0.75,cexCol = 0.7)
+write.table(A4, file = "shamvs7dtbi.txt")
+write.table(selected3, file = "shamvstbi7d_selected.txt")
+
+#### comparison between 3h high, 3h low vs sham ####
+
+conmat7<-makeContrasts("tbi_high - tbi_low","tbi_low - sham", levels = dm)
+ft7<-contrasts.fit(ft, conmat7)
+ft7<-eBayes(ft7)
+topTable(ft7, adjust.method = "fdr", genelist = TVS$Name, sort.by = 'none'  )
+A7<-topTable(ft7, adjust.method = "fdr", genelist = TVS$Name, sort.by = 'none', number = 78  )
+selected7<-(A7$adj.P.Val<0.05)
+x7<-data.frame(ttb[,1:6])
+w7<-data.frame(ttb[,8:12])
+y7<-data.frame(ttb[,13:19])
+z7<-data.frame(x7,w7,y7)
+test7<-data.frame(TVS$Name,selected7,z7)
+esetSel7 <- test7[selected7,]
+my_palette7 <- colorRampPalette(c("green2","green3","green4","red4","red3","red2"))(n = 3)
+heatmap(as.matrix(esetSel7[,3:21]),col=my_palette11, scale = "row", distfun   = function(x) as.dist(1-cor(t(x))), 
+        hclustfun = function(x) hclust(x, method="ave"), labRow = esetSel7$TVS.Name)
+heatmap.2(as.matrix(esetSel7[,3:20]), density.info = "histogram", trace = "none", scale = c("row"), col = my_palette11, margins =c(5,5), labRow = esetSel7$TVS.Name, key = TRUE, hclustfun = function(x) hclust(x, method="ave"), distfun   = function(x) as.dist(1-cor(t(x))), keysize=0.5, key.par = list(cex=0.5), lhei=c(2,5), lwid=c(2,5), cexRow = 0.55,cexCol = 0.7)
+write.table(A7, file = "tbi3hhigh_3hlow_vs_sham.txt")
+write.table(selected7, file = "tbi3hhigh_3hlow_vs_sham_selected.txt")
+
+
