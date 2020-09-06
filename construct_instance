@@ -11,3 +11,5 @@ TBI_3D<-data.frame(TVS[27:32])
 TBI_7d<-data.frame(TVS[33:38])
 
 total<-data.frame(SHAM,TBI_low,TBI_high,TBI_24h,TBI_3D,TBI_7d)
+
+#### this corresponds to a subset of data analyzed ####
