@@ -1,0 +1,27 @@
+#### linear model data organisation ####
+
+sham1<-data.frame(tt[1:7,])
+sham1<-data.frame(rep("sham",nrow(sham1)),sham1)
+colnames(sham1)[1]<-"treatment"
+tbi3d<-data.frame(tt[27:32,])
+tbi3d<-data.frame(rep("tbi_3d",nrow(tbi3d)), tbi3d)
+colnames(tbi3d)[1]<-"treatment"
+tbi7d<-data.frame(tt[33:38,])
+tbi7d<-data.frame(rep("tbi_7d",nrow(tbi7d)), tbi7d)
+colnames(tbi7d)[1]<-"treatment"
+tbil3<-data.frame(tt[8:13,])
+tbil3<-data.frame(rep("tbi_low",nrow(tbil3)), tbil3)
+colnames(tbil3)[1]<-"treatment"
+tbih3<-data.frame(tt[14:20,])
+tbih3<-data.frame(rep("tbi_high",nrow(tbih3)), tbih3)
+colnames(tbih3)[1]<-"treatment"
+tbi24<-data.frame(tt[21:26,])
+tbi24<-data.frame(rep("tbi_24h",nrow(tbi24)), tbi24)
+colnames(tbi24)[1]<-"treatment"
+mergetotal<-rbind 
+mergetotal$treatment<-factor(mergetotal$treatment, levels = c("sham","tbi_low","tbi_high","tbi_24","tbi_3d", "tbi_7d"))
+dm<-model.matrix(~0+mergetotal$treatment)
+colnames(dm)<-c("sham","tbi_low","tbi_high","tbi_24","tbi_3d", "tbi_7d")
+ft<-lmFit(ttb,dm)
+
+#### comparisons were made post linear modeling ####
