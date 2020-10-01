@@ -1,29 +1,19 @@
 #### alternate way to processing ####
 TVS<-ComBat(as.matrix(total),batch = groupbatch,mod=NULL, par.prior=FALSE, mean.only=TRUE, ref.batch = '7')
 
-#### identify outlier via hierarchial clustering ####
+### preprocessing ###
 tnorm <- hclust(dist(TVS, method = 'average')
 plot(tnorm)
-
-#### normalization ####
 total.norm<-normalizeQuantiles(total)
-
-#### log transformation ####
 tnorm.log<-log2(total.norm)
-
-#### batch effect #####
 tbeffect<-removeBatchEffect(tnorm.log, groupbatch)
-
 tt<-t(tnorm.log)
-
-#### PCA analysis ####
-
 tnbpca<-prcomp(tt)
 fviz_eig(tnbpca)
 groupbatch<-factor(c("sham","sham","sham","TBI_low","TBI_low","TBI_low","TBI_high","TBI_high","TBI_24h","TBI_24h","TBI_24h","TBI_7d","TBI_7d","TBI_7d"))
 fviz_pca_ind(tnbpca, col.ind = groupbatch)
 
-#### 3D PCA plot ####
+### 3D PCA plot ###
 
 pc4p<-tnbpca$x
 vgvg<-data.frame(pc4p[1:31,])
